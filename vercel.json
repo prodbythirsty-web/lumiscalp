@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "functions": {
+    "api/order.js":           { "maxDuration": 10 },
+    "api/update-shipping.js": { "maxDuration": 10 },
+    "api/webhook.js":         { "maxDuration": 10 }
+  },
+  "rewrites": [
+    { "source": "/api/order",           "destination": "/api/order.js"           },
+    { "source": "/api/update-shipping", "destination": "/api/update-shipping.js" },
+    { "source": "/api/webhook",         "destination": "/api/webhook.js"         },
+    { "source": "/checkout",            "destination": "/checkout.html"          },
+    { "source": "/((?!api/).*)",        "destination": "/$1"                     }
+  ]
+}
