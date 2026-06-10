@@ -10,9 +10,12 @@ const LED_PRICES = {
 // Bundle multipliers & structure
 // bundle key = number of caps
 const BUNDLES_META = {
-  1: { qty: 1, label: '1 Cap',  sub: 'Single' },
-  2: { qty: 2, label: '2 Caps', sub: 'Share with a loved one' },
+  1: { qty: 1, label: 'LumiScalp Cap',          sub: 'Cap only' },
+  2: { qty: 1, label: 'Cap + 45-Day Serum',      sub: 'Cap & serum supply' },
 };
+
+// Serum add-on price for bundle 2
+const SERUM_PRICE = 9.99;
 
 const GUARANTEE_PRICE = 9.99;
 
@@ -32,10 +35,12 @@ function setLED(count) {
 
 /* ── PRICE COMPUTATION ── */
 function bundlePrice(bundleKey) {
-  return LED_PRICES[selLED].price * BUNDLES_META[bundleKey].qty;
+  const base = LED_PRICES[selLED].price * BUNDLES_META[bundleKey].qty;
+  return bundleKey === 2 ? base + SERUM_PRICE : base;
 }
 function bundleWas(bundleKey) {
-  return LED_PRICES[selLED].was * BUNDLES_META[bundleKey].qty;
+  const base = LED_PRICES[selLED].was * BUNDLES_META[bundleKey].qty;
+  return bundleKey === 2 ? base + SERUM_PRICE : base;
 }
 function bundleTotal(bundleKey) {
   const base = bundlePrice(bundleKey);
@@ -62,11 +67,13 @@ function updateAllPrices() {
   if (b2p) b2p.textContent = '$' + bundleTotal(2).toFixed(2);
   if (b2w) b2w.textContent = '$' + bundleWas(2).toFixed(2);
 
-  // Bundle 2 sub-item prices
+  // Bundle 2 cap sub-item price (cap only, no serum markup)
   const b2cp = document.getElementById('b2-cap-price');
   const b2cw = document.getElementById('b2-cap-was');
-  if (b2cp) b2cp.textContent = '$' + bundlePrice(2).toFixed(2);
-  if (b2cw) b2cw.textContent = '$' + bundleWas(2).toFixed(2);
+  const capPrice = LED_PRICES[selLED].price;
+  const capWas   = LED_PRICES[selLED].was;
+  if (b2cp) b2cp.textContent = '$' + capPrice.toFixed(2);
+  if (b2cw) b2cw.textContent = '$' + capWas.toFixed(2);
 
   // Total row + ATC
   const totalEl  = document.getElementById('total-price');
@@ -160,8 +167,8 @@ function renderCart() {
         <div class="cart-item-top">
           <img class="cart-item-img" src="${THUMB}" alt="LumiScalp Hair Therapy Cap">
           <div class="cart-item-info">
-            <div class="cart-item-name">LumiScalp Cap × ${meta.qty} (${item.led} LEDs)</div>
-            <div class="cart-item-detail">Red Light Therapy${item.guarantee ? ' + 90 Day Guarantee' : ''}</div>
+            <div class="cart-item-name">${meta.label} (${item.led} LEDs)</div>
+            <div class="cart-item-detail">Red Light Therapy${item.bundle === 2 ? ' + 45-Day Serum' : ''}${item.guarantee ? ' + 90 Day Guarantee' : ''}</div>
             <div class="cart-item-price">$${price.toFixed(2)}</div>
           </div>
         </div>

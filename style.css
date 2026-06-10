@@ -76,8 +76,15 @@ button { cursor: pointer; font-family: inherit; border: none; background: none; 
   overflow: hidden;
   display: flex;
   align-items: center;
-  position: relative;
-  z-index: 10;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 501;
+  transition: transform .3s var(--ease);
+}
+.sale-marquee.hide-banner {
+  transform: translateY(-100%);
 }
 .sale-marquee-mid {
   background: #111;
@@ -115,11 +122,18 @@ nav {
   justify-content: space-between;
   padding: 0 40px;
   height: var(--nav-h);
-  position: sticky;
+  position: fixed;
   top: 36px;
-  z-index: 499;
+  left: 0;
+  right: 0;
+  z-index: 500;
   box-shadow: 0 2px 24px rgba(0,0,0,.5);
+  transition: transform .3s var(--ease);
 }
+nav.hide-nav {
+  transform: translateY(-36px);
+}
+body { padding-top: calc(36px + var(--nav-h)); }
 .nav-links {
   display: flex;
   gap: 32px;
@@ -1215,4 +1229,11 @@ footer {
   .how-nm { font-size: 42px; }
   .section-intro h2 { font-size: 34px; }
   .footer-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Bundle serum "Included" label ── */
+.bsi-serum-price {
+  color: var(--green);
+  font-weight: 600;
+  font-size: 12px;
 }

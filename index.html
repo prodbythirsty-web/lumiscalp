@@ -118,8 +118,8 @@
           <div class="bundle-inner">
             <div class="bundle-radio"><div class="bundle-dot"></div></div>
             <div class="bundle-text">
-              <strong>1 Cap</strong>
-              <span>Single</span>
+              <strong>LumiScalp Cap</strong>
+              <span>Cap only — no serum</span>
             </div>
             <div class="bundle-prices">
               <span class="bp-now" id="b1-price">$69.00</span>
@@ -139,27 +139,34 @@
           </div>
         </div>
 
-        <!-- Bundle 2: 2 Caps (Most Popular) -->
+        <!-- Bundle 2: Cap + Serum (Most Popular) -->
         <div class="bundle-card popular selected" id="card-2" tabindex="0" role="radio" aria-checked="true"
              onclick="selectBundle(2)" onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();selectBundle(2)}">
           <div class="popular-tag">Most Popular</div>
           <div class="bundle-inner">
             <div class="bundle-radio"><div class="bundle-dot"></div></div>
             <div class="bundle-text">
-              <strong>2 Caps</strong>
-              <span>Share with a loved one</span>
+              <strong>Cap + 45-Day Serum</strong>
+              <span>Cap &amp; full serum supply</span>
             </div>
             <div class="bundle-prices">
-              <span class="bp-now" id="b2-price">$124.99</span>
-              <span class="bp-was" id="b2-was">$279.98</span>
+              <span class="bp-now" id="b2-price">$78.99</span>
+              <span class="bp-was" id="b2-was">$174.99</span>
             </div>
           </div>
           <div class="bundle-sub-items">
             <div class="bsi-row">
               <img src="hat1.jpg" alt="LumiScalp Cap" class="bsi-img">
               <div class="bsi-info">
-                <span class="bsi-name">LumiScalp Cap × 2</span>
-                <span class="bsi-price-wrap"><span class="bsi-now" id="b2-cap-price">$124.99</span> <span class="bsi-was" id="b2-cap-was">$279.98</span></span>
+                <span class="bsi-name">LumiScalp Cap</span>
+                <span class="bsi-price-wrap"><span class="bsi-now" id="b2-cap-price">$69.00</span> <span class="bsi-was" id="b2-cap-was">$139.99</span></span>
+              </div>
+            </div>
+            <div class="bsi-row">
+              <img src="hat2.jpg" alt="45-Day Scalp Serum" class="bsi-img">
+              <div class="bsi-info">
+                <span class="bsi-name">45-Day Scalp Serum Supply</span>
+                <span class="bsi-price-wrap bsi-serum-price">Included</span>
               </div>
             </div>
           </div>
@@ -177,9 +184,9 @@
               <div class="addon-check-wrap">
                 <div class="addon-checkbox checked free-check">✓</div>
               </div>
-              <img src="hat1.jpg" alt="Free Gift" class="addon-img">
-              <span class="addon-name">+ FREE Mystery Gift</span>
-              <span class="addon-price free-price"><del>$15.00</del></span>
+              <img src="hat1.jpg" alt="LumiScalp Scalp Massager" class="addon-img">
+              <span class="addon-name">+ FREE LumiScalp Scalp Massager</span>
+              <span class="addon-price free-price"><del>$24.99</del></span>
             </div>
           </div>
         </div>
@@ -555,6 +562,36 @@
 </div>
 
 <script src="script.js"></script>
+
+<!-- Hide banner on scroll down, show on scroll up -->
+<script>
+(function() {
+  const banner = document.querySelector('.sale-marquee');
+  const nav    = document.querySelector('nav');
+  let lastY = window.scrollY;
+  let ticking = false;
+
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      requestAnimationFrame(function() {
+        const y = window.scrollY;
+        if (y > lastY && y > 80) {
+          // scrolling down
+          banner.classList.add('hide-banner');
+          nav.classList.add('hide-nav');
+        } else {
+          // scrolling up
+          banner.classList.remove('hide-banner');
+          nav.classList.remove('hide-nav');
+        }
+        lastY = y;
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+})();
+</script>
 
 <!-- Before/After Slider JS -->
 <script>
