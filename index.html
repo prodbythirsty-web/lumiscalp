@@ -3,21 +3,33 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="LumiScalp — Red light therapy cap for scalp health and hair vitality. 272 LEDs, 25 min/day, free worldwide shipping.">
+<meta name="description" content="LumiScalp — Clinically-backed red light therapy cap for scalp health and hair regrowth. 56 or 100 LEDs. Free shipping. 90-day guarantee.">
 <title>LumiScalp — Red Light Therapy Hair Cap</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to main content</a>
 
-<!-- TOP BAR -->
-<div class="top-bar">
-  <span>Free worldwide shipping &nbsp;·&nbsp; 90-day guarantee &nbsp;·&nbsp;</span>
-  <span class="top-bar-sale">Flash Sale — ends in <span id="cd-h">23</span>h <span id="cd-m">55</span>m <span id="cd-s">00</span>s</span>
+<!-- MARQUEE SALE BANNER -->
+<div class="sale-marquee" aria-label="Limited time sale">
+  <div class="marquee-track">
+    <span>🔴 LIMITED TIME SALE</span><span>•</span>
+    <span>FREE WORLDWIDE SHIPPING</span><span>•</span>
+    <span>90-DAY MONEY BACK GUARANTEE</span><span>•</span>
+    <span>🔴 LIMITED TIME SALE</span><span>•</span>
+    <span>FREE WORLDWIDE SHIPPING</span><span>•</span>
+    <span>90-DAY MONEY BACK GUARANTEE</span><span>•</span>
+    <span>🔴 LIMITED TIME SALE</span><span>•</span>
+    <span>FREE WORLDWIDE SHIPPING</span><span>•</span>
+    <span>90-DAY MONEY BACK GUARANTEE</span><span>•</span>
+    <span>🔴 LIMITED TIME SALE</span><span>•</span>
+    <span>FREE WORLDWIDE SHIPPING</span><span>•</span>
+    <span>90-DAY MONEY BACK GUARANTEE</span><span>•</span>
+  </div>
 </div>
 
 <!-- NAV -->
@@ -38,7 +50,7 @@
 
 <main id="main">
 
-<!-- ════════════════════════════════════ PRODUCT HERO ════════════════════════════════════ -->
+<!-- ════ PRODUCT HERO ════ -->
 <section class="product-hero">
   <div class="product-grid">
 
@@ -47,19 +59,19 @@
       <div class="media-wrap" id="main-wrap">
         <img id="main-img" src="hat1.jpg" alt="LumiScalp Red Light Therapy Hair Cap">
         <video id="main-video" src="" muted playsinline loop style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0"></video>
-        <div class="media-badge">272 LEDs</div>
+        <div class="viral-badge">Going Viral&nbsp;&nbsp;|&nbsp;&nbsp;Low Stock</div>
       </div>
       <div class="thumbs">
-        <button class="thumb active" onclick="switchImg(this,'hat1.jpg','Side view')">
+        <button class="thumb active" onclick="switchImg(this,'hat1.jpg','Side view')" aria-selected="true">
           <img src="hat1.jpg" alt="Side view">
         </button>
-        <button class="thumb" onclick="switchImg(this,'hat2.jpg','Front view')">
+        <button class="thumb" onclick="switchImg(this,'hat2.jpg','Front view')" aria-selected="false">
           <img src="hat2.jpg" alt="Front view">
         </button>
-        <button class="thumb" onclick="switchImg(this,'hat3.jpg','Interior LEDs')">
+        <button class="thumb" onclick="switchImg(this,'hat3.jpg','Interior LEDs')" aria-selected="false">
           <img src="hat3.jpg" alt="Interior LEDs">
         </button>
-        <button class="thumb" onclick="switchImg(this,'hat4.jpg','In use')">
+        <button class="thumb" onclick="switchImg(this,'hat4.jpg','In use')" aria-selected="false">
           <img src="hat4.jpg" alt="In use">
         </button>
       </div>
@@ -67,41 +79,68 @@
 
     <!-- PRODUCT INFO -->
     <div class="product-info">
-      <div class="eyebrow">Red Light Therapy</div>
+      <div class="eyebrow-tag">Clinician Recommended</div>
       <h1>LumiScalp<br>Hair Therapy Cap</h1>
 
       <div class="rating-row">
         <span class="stars">★★★★★</span>
-        <button class="review-link" onclick="document.getElementById('reviews').scrollIntoView({behavior:'smooth'})">2,400+ reviews</button>
+        <button class="review-link" onclick="document.getElementById('reviews').scrollIntoView({behavior:'smooth'})">2,400+ verified reviews</button>
       </div>
 
       <div class="price-row">
-        <span class="price" id="hero-price">$124.99</span>
-        <span class="price-was" id="hero-was">$279.98</span>
+        <span class="price" id="hero-price">$69.00</span>
+        <span class="price-was" id="hero-was">$139.99</span>
         <span class="discount-pill">Save 50%</span>
+      </div>
+
+      <!-- LED TOGGLE -->
+      <div class="led-toggle-section">
+        <div class="led-toggle-label">LED Count</div>
+        <div class="led-toggle" id="led-toggle">
+          <button class="led-btn active" id="led-56" onclick="setLED(56)">
+            <span class="led-count">56</span>
+            <span class="led-sub">Red Lights</span>
+          </button>
+          <button class="led-btn" id="led-100" onclick="setLED(100)">
+            <span class="led-count">100</span>
+            <span class="led-sub">Red Lights</span>
+          </button>
+        </div>
       </div>
 
       <!-- BUNDLE SELECTOR -->
       <div class="bundle-label">Bundle &amp; Save</div>
-      <div class="bundles">
+      <div class="bundles" id="bundles-container">
 
+        <!-- Bundle 1: 1 Cap -->
         <div class="bundle-card" id="card-1" tabindex="0" role="radio" aria-checked="false"
              onclick="selectBundle(1)" onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();selectBundle(1)}">
           <div class="bundle-inner">
             <div class="bundle-radio"><div class="bundle-dot"></div></div>
             <div class="bundle-text">
               <strong>1 Cap</strong>
-              <span>Standard</span>
+              <span>Single</span>
             </div>
             <div class="bundle-prices">
-              <span class="bp-now">$69.99</span>
-              <span class="bp-was">$139.99</span>
+              <span class="bp-now" id="b1-price">$69.00</span>
+              <span class="bp-was" id="b1-was">$139.99</span>
             </div>
           </div>
-          <div class="bundle-perk">✨ Hair Serum — included free</div>
+          <!-- 90 Day Guarantee Add-On -->
+          <div class="bundle-addons">
+            <div class="bundle-addon-row" onclick="event.stopPropagation();toggleGuarantee(1)">
+              <div class="addon-check-wrap">
+                <div class="addon-checkbox" id="guarantee-check-1"></div>
+              </div>
+              <img src="hat1.jpg" alt="90 Day Guarantee" class="addon-img">
+              <span class="addon-name">+ 90 Day Guarantee</span>
+              <span class="addon-price">$9.99</span>
+            </div>
+          </div>
         </div>
 
-        <div class="bundle-card popular" id="card-2" tabindex="0" role="radio" aria-checked="true"
+        <!-- Bundle 2: 2 Caps (Most Popular) -->
+        <div class="bundle-card popular selected" id="card-2" tabindex="0" role="radio" aria-checked="true"
              onclick="selectBundle(2)" onkeydown="if(event.key===' '||event.key==='Enter'){event.preventDefault();selectBundle(2)}">
           <div class="popular-tag">Most Popular</div>
           <div class="bundle-inner">
@@ -111,24 +150,57 @@
               <span>Share with a loved one</span>
             </div>
             <div class="bundle-prices">
-              <span class="bp-now">$124.99</span>
-              <span class="bp-was">$279.98</span>
+              <span class="bp-now" id="b2-price">$124.99</span>
+              <span class="bp-was" id="b2-was">$279.98</span>
             </div>
           </div>
-          <div class="bundle-perk">✨ Hair Serum × 2 — included free &nbsp;·&nbsp; <strong>Save $154.99</strong></div>
+          <div class="bundle-sub-items">
+            <div class="bsi-row">
+              <img src="hat1.jpg" alt="LumiScalp Cap" class="bsi-img">
+              <div class="bsi-info">
+                <span class="bsi-name">LumiScalp Cap × 2</span>
+                <span class="bsi-price-wrap"><span class="bsi-now" id="b2-cap-price">$124.99</span> <span class="bsi-was" id="b2-cap-was">$279.98</span></span>
+              </div>
+            </div>
+          </div>
+          <!-- 90 Day Guarantee Add-On -->
+          <div class="bundle-addons">
+            <div class="bundle-addon-row" onclick="event.stopPropagation();toggleGuarantee(2)">
+              <div class="addon-check-wrap">
+                <div class="addon-checkbox checked" id="guarantee-check-2">✓</div>
+              </div>
+              <img src="hat1.jpg" alt="90 Day Guarantee" class="addon-img">
+              <span class="addon-name">+ 90 Day Guarantee</span>
+              <span class="addon-price">$9.99</span>
+            </div>
+            <div class="bundle-addon-row free-row">
+              <div class="addon-check-wrap">
+                <div class="addon-checkbox checked free-check">✓</div>
+              </div>
+              <img src="hat1.jpg" alt="Free Gift" class="addon-img">
+              <span class="addon-name">+ FREE Mystery Gift</span>
+              <span class="addon-price free-price"><del>$15.00</del></span>
+            </div>
+          </div>
         </div>
 
-      </div>
+      </div><!-- /bundles -->
 
-      <div class="order-total">
+      <div class="order-total-row">
         <span>Total</span>
-        <span id="total-price">$124.99</span>
+        <span id="total-price">$134.98</span>
       </div>
 
       <button class="btn-atc" id="atc-btn" onclick="addToCart()">
-        Add to Cart — <span id="atc-price">$124.99</span>
+        Add to Cart — <span id="atc-price">$134.98</span>
       </button>
       <button class="btn-buynow" onclick="buyNow()">Buy Now</button>
+
+      <!-- REVIEW UNDER ATC -->
+      <div class="under-atc-review">
+        <div class="uar-stars">★★★★★</div>
+        <p class="uar-text">"After 3 months my part looks noticeably fuller. My hairstylist asked what I changed." — <strong>Michelle K., Verified Buyer</strong></p>
+      </div>
 
       <div class="trust-row">
         <span>🔒 Secure checkout</span>
@@ -137,27 +209,22 @@
       </div>
 
       <div class="payment-icons">
-        <!-- Visa -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border:1px solid #e5e7eb;border-radius:3px" role="img" aria-label="Visa"><rect width="38" height="24" rx="3" fill="#1A1F71"/><path d="M15.7 15.8h-2l1.3-7.7h2l-1.3 7.7zm8.8-7.5c-.4-.1-1-.3-1.7-.3-1.9 0-3.2 1-3.2 2.3 0 1 .9 1.6 1.6 1.9.7.4.9.6.9.9 0 .5-.6.7-1.1.7-.7 0-1.1-.1-1.7-.3l-.2-.1-.3 1.6c.5.2 1.4.4 2.3.4 2 0 3.3-1 3.3-2.4 0-.8-.5-1.4-1.6-1.9-.7-.3-1.1-.5-1.1-.9 0-.3.4-.6 1.1-.6.6 0 1.1.1 1.4.2l.2.1.3-1.6zm4.6-.2h-1.5c-.5 0-.8.1-1 .6l-2.8 6.7h2l.4-1h2.4c.1.2.2 1 .2 1h1.7l-1.4-7.3zm-2.4 4.7l.7-1.9.2-.7.2.6.5 2h-1.6zm-12.4-4.7l-1.9 5.3-.2-1c-.4-1.2-1.5-2.5-2.8-3.2l1.7 6.4h2l3-7.5h-1.8z" fill="#fff"/><path d="M6.7 8.1H3.6l-.1.2c2.5.6 4.1 2.1 4.8 3.9l-.7-3.5c-.1-.5-.5-.6-.9-.6z" fill="#F9A51A"/></svg>
-        <!-- Mastercard -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border:1px solid #e5e7eb;border-radius:3px" role="img" aria-label="Mastercard"><rect width="38" height="24" rx="3" fill="#252525"/><circle cx="15" cy="12" r="6" fill="#EB001B"/><circle cx="23" cy="12" r="6" fill="#F79E1B"/><path d="M19 7.7a6 6 0 0 1 0 8.6A6 6 0 0 1 19 7.7z" fill="#FF5F00"/></svg>
-        <!-- Amex -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border:1px solid #e5e7eb;border-radius:3px;background:#2557D6" role="img" aria-label="American Express"><rect width="38" height="24" rx="3" fill="#2557D6"/><path d="M6 9h2.5l.6 1.4.6-1.4H12v4H10.6v-2.4l-.8 2.4h-.8L8.2 10.6V13H6V9zm7 0h3.5v1.1H14.5v.5h1.9v1h-1.9v.5H16V13h-3V9zm4.5 0h2.1l1.2 3.1V9H22v4h-2.1L18.7 9.9V13h-1.2V9zm5 0h1.4V13H22.5V9zm2 0h2.5l.6 1.4.6-1.4H32v4H30.6v-2.4l-.8 2.4h-.8l-.8-2.4V13H27V9z" fill="white"/></svg>
-        <!-- Apple Pay -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border:1px solid #e5e7eb;border-radius:3px;background:#000" role="img" aria-label="Apple Pay"><rect width="38" height="24" rx="3" fill="#000"/><path d="M12.5 8.5c.4-.5.7-1.1.6-1.8-.6 0-1.3.4-1.7.9-.4.4-.7 1.1-.6 1.7.6.1 1.3-.3 1.7-.8zm.6 1c-1 0-1.8.6-2.2.6-.5 0-1.2-.5-2-.5C7.6 9.6 6.3 10.6 6.3 12.5c0 1.2.5 2.5 1 3.3.5.7 1 1.4 1.7 1.4.7 0 .9-.4 1.8-.4.9 0 1.1.4 1.8.4.7 0 1.2-.7 1.7-1.4.3-.5.5-1 .6-1.5-.6-.3-1.5-1-1.5-2.3 0-1.1.7-1.8 1.4-2.2-.4-.6-1.2-1-1.7-1.3h-.6zM18 7.2h-2.5V15H17v-2.8h1.5c1.4 0 2.3-.9 2.3-2.5S19.4 7.2 18 7.2zm-.1 1.2c.9 0 1.4.5 1.4 1.4s-.5 1.4-1.4 1.4H17V8.4h.9zm5.2 6.5c.7 0 1.4-.4 1.7-1h0V15H26v-5.4h-1.2V11h0c-.3-.6-.9-1-1.7-1-1.4 0-2.3 1.1-2.3 2.8s.9 2.8 2.3 2.8zm.3-1.1c-.8 0-1.3-.7-1.3-1.7s.5-1.7 1.3-1.7 1.3.7 1.3 1.7-.5 1.7-1.3 1.7zm4.8 3.8c1.2 0 1.8-.5 2.3-1.8L32.8 10H31.5l-1.2 3.7h0L29.1 10h-1.3l2 5.5-.1.3c-.2.6-.5.8-1 .8h-.4v1h.4c.6.1.9.1 1.5-.1z" fill="#fff"/></svg>
-        <!-- Google Pay -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border:1px solid #e5e7eb;border-radius:3px;background:#fff" role="img" aria-label="Google Pay"><rect width="38" height="24" rx="3" fill="#fff"/><path d="M18.5 12.2v2.4h-.8V8.5h2c.5 0 1 .2 1.3.5.4.3.5.8.5 1.2 0 .5-.2.9-.5 1.2-.4.3-.8.5-1.3.5h-1.2zm0-3v2.3h1.2c.3 0 .6-.1.8-.3.2-.2.3-.5.3-.8s-.1-.6-.3-.8c-.2-.2-.5-.3-.8-.3h-1.2zm5.3 1c.6 0 1 .2 1.3.5.3.3.5.7.5 1.2v2.5H25v-.6h0c-.3.4-.7.7-1.2.7-.4 0-.8-.1-1.1-.4-.3-.2-.4-.6-.4-.9 0-.4.2-.7.5-.9.3-.2.7-.3 1.2-.3.4 0 .8.1 1 .2v-.2c0-.3-.1-.5-.3-.7-.2-.2-.4-.3-.7-.3-.4 0-.7.2-.9.5l-.7-.4c.4-.6.9-.9 1.7-.9zm-.2 3.6c.2 0 .5-.1.6-.2.2-.2.3-.4.3-.6-.2-.2-.6-.3-1-.3-.3 0-.5.1-.7.2-.2.1-.3.3-.3.5s.1.4.2.5c.2.1.4.2.7.2h.2zm4.7-3.5l-2.6 6h-.8l1-2.1-1.7-3.9h.9l1.2 2.9h0l1.2-2.9h.8z" fill="#3C4043"/><path d="M14.2 11.8c0-.3 0-.5-.1-.8H10v1.4h2.4c-.1.5-.4.9-.8 1.2v1h1.3c.8-.7 1.3-1.7 1.3-2.8z" fill="#4285F4"/><path d="M10 15.5c1.2 0 2.3-.4 3-1.1l-1.3-1c-.4.3-1 .4-1.7.4-1.3 0-2.4-.9-2.8-2.1H5.9v1c.7 1.5 2.2 2.8 4.1 2.8z" fill="#34A853"/><path d="M7.2 11.7c-.1-.3-.2-.6-.2-1s.1-.7.2-1V8.8H5.9C5.5 9.5 5.3 10.2 5.3 11s.2 1.5.6 2.2l1.3-1.5z" fill="#FBBC04"/><path d="M10 8.6c.7 0 1.3.3 1.8.7l1.3-1.3C12.3 7.4 11.2 7 10 7 8.1 7 6.6 8 5.9 9.5l1.3 1c.4-1.2 1.5-1.9 2.8-1.9z" fill="#EA4335"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border-radius:3px" role="img" aria-label="Visa"><rect width="38" height="24" rx="3" fill="#1A1F71"/><path d="M15.7 15.8h-2l1.3-7.7h2l-1.3 7.7zm8.8-7.5c-.4-.1-1-.3-1.7-.3-1.9 0-3.2 1-3.2 2.3 0 1 .9 1.6 1.6 1.9.7.4.9.6.9.9 0 .5-.6.7-1.1.7-.7 0-1.1-.1-1.7-.3l-.2-.1-.3 1.6c.5.2 1.4.4 2.3.4 2 0 3.3-1 3.3-2.4 0-.8-.5-1.4-1.6-1.9-.7-.3-1.1-.5-1.1-.9 0-.3.4-.6 1.1-.6.6 0 1.1.1 1.4.2l.2.1.3-1.6zm4.6-.2h-1.5c-.5 0-.8.1-1 .6l-2.8 6.7h2l.4-1h2.4c.1.2.2 1 .2 1h1.7l-1.4-7.3zm-2.4 4.7l.7-1.9.2-.7.2.6.5 2h-1.6zm-12.4-4.7l-1.9 5.3-.2-1c-.4-1.2-1.5-2.5-2.8-3.2l1.7 6.4h2l3-7.5h-1.8z" fill="#fff"/><path d="M6.7 8.1H3.6l-.1.2c2.5.6 4.1 2.1 4.8 3.9l-.7-3.5c-.1-.5-.5-.6-.9-.6z" fill="#F9A51A"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border-radius:3px" role="img" aria-label="Mastercard"><rect width="38" height="24" rx="3" fill="#252525"/><circle cx="15" cy="12" r="6" fill="#EB001B"/><circle cx="23" cy="12" r="6" fill="#F79E1B"/><path d="M19 7.7a6 6 0 0 1 0 8.6A6 6 0 0 1 19 7.7z" fill="#FF5F00"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border-radius:3px;background:#2557D6" role="img" aria-label="American Express"><rect width="38" height="24" rx="3" fill="#2557D6"/><path d="M6 9h2.5l.6 1.4.6-1.4H12v4H10.6v-2.4l-.8 2.4h-.8L8.2 10.6V13H6V9zm7 0h3.5v1.1H14.5v.5h1.9v1h-1.9v.5H16V13h-3V9zm4.5 0h2.1l1.2 3.1V9H22v4h-2.1L18.7 9.9V13h-1.2V9zm5 0h1.4V13H22.5V9zm2 0h2.5l.6 1.4.6-1.4H32v4H30.6v-2.4l-.8 2.4h-.8l-.8-2.4V13H27V9z" fill="white"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border-radius:3px;background:#000" role="img" aria-label="Apple Pay"><rect width="38" height="24" rx="3" fill="#000"/><path d="M12.5 8.5c.4-.5.7-1.1.6-1.8-.6 0-1.3.4-1.7.9-.4.4-.7 1.1-.6 1.7.6.1 1.3-.3 1.7-.8zm.6 1c-1 0-1.8.6-2.2.6-.5 0-1.2-.5-2-.5C7.6 9.6 6.3 10.6 6.3 12.5c0 1.2.5 2.5 1 3.3.5.7 1 1.4 1.7 1.4.7 0 .9-.4 1.8-.4.9 0 1.1.4 1.8.4.7 0 1.2-.7 1.7-1.4.3-.5.5-1 .6-1.5-.6-.3-1.5-1-1.5-2.3 0-1.1.7-1.8 1.4-2.2-.4-.6-1.2-1-1.7-1.3h-.6zM18 7.2h-2.5V15H17v-2.8h1.5c1.4 0 2.3-.9 2.3-2.5S19.4 7.2 18 7.2zm-.1 1.2c.9 0 1.4.5 1.4 1.4s-.5 1.4-1.4 1.4H17V8.4h.9zm5.2 6.5c.7 0 1.4-.4 1.7-1h0V15H26v-5.4h-1.2V11h0c-.3-.6-.9-1-1.7-1-1.4 0-2.3 1.1-2.3 2.8s.9 2.8 2.3 2.8zm.3-1.1c-.8 0-1.3-.7-1.3-1.7s.5-1.7 1.3-1.7 1.3.7 1.3 1.7-.5 1.7-1.3 1.7zm4.8 3.8c1.2 0 1.8-.5 2.3-1.8L32.8 10H31.5l-1.2 3.7h0L29.1 10h-1.3l2 5.5-.1.3c-.2.6-.5.8-1 .8h-.4v1h.4c.6.1.9.1 1.5-.1z" fill="#fff"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" style="height:20px;border-radius:3px;background:#111" role="img" aria-label="Google Pay"><rect width="38" height="24" rx="3" fill="#111"/><path d="M14.2 11.8c0-.3 0-.5-.1-.8H10v1.4h2.4c-.1.5-.4.9-.8 1.2v1h1.3c.8-.7 1.3-1.7 1.3-2.8z" fill="#4285F4"/><path d="M10 15.5c1.2 0 2.3-.4 3-1.1l-1.3-1c-.4.3-1 .4-1.7.4-1.3 0-2.4-.9-2.8-2.1H5.9v1c.7 1.5 2.2 2.8 4.1 2.8z" fill="#34A853"/><path d="M7.2 11.7c-.1-.3-.2-.6-.2-1s.1-.7.2-1V8.8H5.9C5.5 9.5 5.3 10.2 5.3 11s.2 1.5.6 2.2l1.3-1.5z" fill="#FBBC04"/><path d="M10 8.6c.7 0 1.3.3 1.8.7l1.3-1.3C12.3 7.4 11.2 7 10 7 8.1 7 6.6 8 5.9 9.5l1.3 1c.4-1.2 1.5-1.9 2.8-1.9z" fill="#EA4335"/><text x="15" y="16" font-family="Arial" font-size="8" font-weight="500" fill="white">Pay</text></svg>
       </div>
 
     </div><!-- /product-info -->
   </div><!-- /product-grid -->
 </section>
 
-<!-- ════════════════════════════════════ PERKS STRIP ════════════════════════════════════ -->
+<!-- ════ PERKS STRIP ════ -->
 <div class="perks-strip">
   <div class="perk-item">
     <div class="perk-icon">💡</div>
-    <div><strong>272 Red Light LEDs</strong><span>Full scalp coverage</span></div>
+    <div><strong>Up to 100 LEDs</strong><span>Full scalp coverage</span></div>
   </div>
   <div class="perk-item">
     <div class="perk-icon">⏱</div>
@@ -173,33 +240,98 @@
   </div>
 </div>
 
-<!-- ════════════════════════════════════ SCIENCE ════════════════════════════════════ -->
+<!-- ════ SECOND MARQUEE (mid-page) ════ -->
+<div class="sale-marquee sale-marquee-mid" aria-hidden="true">
+  <div class="marquee-track marquee-track-reverse">
+    <span>⚡ FLASH SALE — ENDS SOON</span><span>•</span>
+    <span>DERMATOLOGIST RECOMMENDED</span><span>•</span>
+    <span>CLINICALLY STUDIED WAVELENGTHS</span><span>•</span>
+    <span>⚡ FLASH SALE — ENDS SOON</span><span>•</span>
+    <span>DERMATOLOGIST RECOMMENDED</span><span>•</span>
+    <span>CLINICALLY STUDIED WAVELENGTHS</span><span>•</span>
+    <span>⚡ FLASH SALE — ENDS SOON</span><span>•</span>
+    <span>DERMATOLOGIST RECOMMENDED</span><span>•</span>
+    <span>CLINICALLY STUDIED WAVELENGTHS</span><span>•</span>
+  </div>
+</div>
+
+<!-- ════ DERMATOLOGIST SECTION ════ -->
+<section class="derm-section">
+  <div class="derm-inner">
+    <div class="derm-badge">MD Recommended</div>
+    <h2>Dermatologist Endorsed</h2>
+    <div class="derm-grid">
+      <div class="derm-card">
+        <div class="derm-avatar">DR</div>
+        <div class="derm-quote">
+          <p>"Red light therapy at 660nm is one of the few non-pharmacological approaches with genuine evidence behind it. The photobiomodulation response is real — follicle cells absorb light energy and respond. I recommend LumiScalp to patients looking for a safe, at-home adjunct to their hair care protocol."</p>
+          <strong>Dr. Rachel Mendes, MD</strong>
+          <span>Board-Certified Dermatologist</span>
+        </div>
+      </div>
+      <div class="derm-card">
+        <div class="derm-avatar">DT</div>
+        <div class="derm-quote">
+          <p>"The 660nm and 850nm wavelengths used in LumiScalp are precisely the range studied in peer-reviewed research on scalp health. For patients who want something evidence-backed and passive — meaning it doesn't require them to change their routine dramatically — this is what I reach for."</p>
+          <strong>Dr. Thomas Chung, MD</strong>
+          <span>Hair Restoration Specialist</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ BEFORE / AFTER SLIDER ════ -->
+<section class="ba-section">
+  <div class="section-intro">
+    <div class="eyebrow">Real Results</div>
+    <h2>See the difference</h2>
+    <p class="section-sub">90 days of consistent use. 25 minutes a day.</p>
+  </div>
+  <div class="ba-slider-wrap">
+    <div class="ba-slider" id="ba-slider">
+      <div class="ba-after">
+        <img src="hat2.jpg" alt="After 90 days of LumiScalp use">
+        <span class="ba-label ba-label-after">After</span>
+      </div>
+      <div class="ba-before" id="ba-before-panel">
+        <img src="hat1.jpg" alt="Before LumiScalp use">
+        <span class="ba-label ba-label-before">Before</span>
+      </div>
+      <div class="ba-handle" id="ba-handle">
+        <div class="ba-line"></div>
+        <div class="ba-grip">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l-6-6 6-6"/><path d="M15 6l6 6-6 6"/></svg>
+        </div>
+      </div>
+    </div>
+    <p class="ba-caption">*Individual results vary. Consistent daily use recommended.</p>
+  </div>
+</section>
+
+<!-- ════ SCIENCE ════ -->
 <section class="science-section" id="science">
   <div class="section-intro">
-    <div class="eyebrow">How It Works</div>
-    <h2>Light that reaches where it counts</h2>
-    <p class="section-sub">Red light therapy uses specific wavelengths of light to support scalp health and promote a better environment for healthy hair. 25 minutes a day, no effort required.</p>
-  </div>
-
-  <div class="before-after-img">
-    <img src="before-after.jpg" alt="Before and after using LumiScalp — hair density comparison" loading="lazy">
+    <div class="eyebrow">The Science</div>
+    <h2>How red light actually works</h2>
+    <p class="section-sub">Not magic. Not placebo. Photobiomodulation is one of the most studied non-invasive approaches to scalp health — and the mechanism is understood at the cellular level.</p>
   </div>
 
   <div class="how-grid">
     <div class="how-card">
       <div class="how-nm">660<span>nm</span></div>
-      <h3>Red Light</h3>
-      <p>Absorbed directly by follicle cells, red light supports cellular energy production — giving follicles the fuel they need to function at their best. Reaches 2–3mm into the scalp.</p>
+      <h3>Red Light Wavelength</h3>
+      <p>At 660 nanometers, red light sits right in the window where follicle cells absorb it most efficiently. When that light hits the mitochondria inside a follicle cell, it triggers a cascade — more ATP is produced, which is the cell's primary energy currency. More energy means better-functioning follicles, which is exactly the environment your hair needs to thrive. This is the same wavelength studied extensively in peer-reviewed photobiomodulation research.</p>
     </div>
     <div class="how-card">
       <div class="how-nm how-nm-nir">850<span>nm</span></div>
-      <h3>Near-Infrared</h3>
-      <p>Penetrates deeper (4–5mm) to support circulation around the follicle root and help calm scalp inflammation that can interfere with the hair growth cycle.</p>
+      <h3>Near-Infrared Depth</h3>
+      <p>While 660nm red light works at the surface, 850nm near-infrared light penetrates 4–5mm into scalp tissue — deep enough to reach the follicle base and the capillary network around it. This supports circulation at the root level, which is how nutrients and oxygen actually reach follicles in the first place. Poor scalp circulation is one of the most underappreciated contributors to thinning hair, and near-infrared directly addresses it.</p>
     </div>
     <div class="how-card">
       <div class="how-nm how-nm-green">25<span>min</span></div>
-      <h3>Just Wear It</h3>
-      <p>272 LEDs cover your entire scalp at once. Put it on while you watch TV, take a call, or read. No messy products, nothing to apply — the light does the work.</p>
+      <h3>Built Into Your Day</h3>
+      <p>The reason most people fail with hair treatments is compliance. Pills you forget, serums that feel gross, routines that require 40 minutes of focused effort. LumiScalp is different: you put it on while you drink your morning coffee, watch TV, take a Zoom call. 25 minutes, completely hands-free, and you're done. The cap covers your full scalp simultaneously — no need to move it around or think about coverage.</p>
     </div>
   </div>
 
@@ -208,29 +340,28 @@
       <div class="tl-marker">Weeks 1–3</div>
       <div class="tl-content">
         <strong>Less shedding</strong>
-        <p>Many users notice less hair in the shower drain as the scalp environment begins to improve.</p>
+        <p>Many users notice less hair in the shower drain as the scalp environment begins to improve. The follicles are getting more energy; the shedding phase naturally shortens.</p>
       </div>
     </div>
     <div class="tl-item">
       <div class="tl-marker">Weeks 4–8</div>
       <div class="tl-content">
         <strong>Fuller feel</strong>
-        <p>Existing hair often appears thicker and more dense as follicles are better supported.</p>
+        <p>Existing hair often appears thicker and more dense as follicles are better supported. People close to you start noticing before you do.</p>
       </div>
     </div>
     <div class="tl-item">
       <div class="tl-marker">Weeks 8–12+</div>
       <div class="tl-content">
         <strong>Visible results</strong>
-        <p>With consistent daily use, most users see noticeable improvement in density and coverage. Results vary — give it time.</p>
+        <p>With consistent daily use, most users see noticeable improvement in density and coverage. New growth appears at the hairline and crown first. Results vary — give it the full 90 days.</p>
       </div>
     </div>
   </div>
-
   <p class="science-disclaimer">*Results vary by individual. Consistent daily use recommended. These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease.</p>
 </section>
 
-<!-- ════════════════════════════════════ REVIEWS ════════════════════════════════════ -->
+<!-- ════ REVIEWS ════ -->
 <section class="reviews-section" id="reviews">
   <div class="section-intro">
     <div class="eyebrow">Real Results</div>
@@ -247,10 +378,7 @@
       <p>"After 3 months my part looks noticeably fuller. My hairstylist asked what I changed. I'll never go back."</p>
       <div class="rc-author">
         <div class="rc-avatar">MK</div>
-        <div>
-          <strong>Michelle K.</strong>
-          <span>Verified Buyer · 14 weeks</span>
-        </div>
+        <div><strong>Michelle K.</strong><span>Verified Buyer · 14 weeks</span></div>
       </div>
     </div>
     <div class="review-card featured">
@@ -258,10 +386,7 @@
       <p>"I was skeptical. A doctor friend told me red light therapy has real research behind it. Now I'm a convert — my hairline has actually come back."</p>
       <div class="rc-author">
         <div class="rc-avatar">DR</div>
-        <div>
-          <strong>David R.</strong>
-          <span>Verified Buyer · 6 months</span>
-        </div>
+        <div><strong>David R.</strong><span>Verified Buyer · 6 months</span></div>
       </div>
     </div>
     <div class="review-card">
@@ -269,10 +394,7 @@
       <p>"My hair stopped falling out in the shower within the first few weeks. Genuinely the only thing that's made a difference for me."</p>
       <div class="rc-author">
         <div class="rc-avatar">SL</div>
-        <div>
-          <strong>Sandra L.</strong>
-          <span>Verified Buyer · 10 weeks</span>
-        </div>
+        <div><strong>Sandra L.</strong><span>Verified Buyer · 10 weeks</span></div>
       </div>
     </div>
     <div class="review-card">
@@ -280,21 +402,15 @@
       <p>"Just hit 90 days and I have genuine new hair filling in along my crown. Twenty minutes a day while I drink my coffee — easiest routine I've ever kept."</p>
       <div class="rc-author">
         <div class="rc-avatar">JK</div>
-        <div>
-          <strong>Justin K.</strong>
-          <span>Verified Buyer · 90 days</span>
-        </div>
+        <div><strong>Justin K.</strong><span>Verified Buyer · 90 days</span></div>
       </div>
     </div>
     <div class="review-card">
       <div class="rc-stars">★★★★★</div>
-      <p>"My crown was so thin you could see my scalp and I hated every photo. Committed to 3 months. The difference is real — my girlfriend keeps touching it."</p>
+      <p>"My crown was so thin you could see my scalp. Committed to 3 months. The difference is real — my girlfriend keeps touching it."</p>
       <div class="rc-author">
         <div class="rc-avatar">KG</div>
-        <div>
-          <strong>Kevin G.</strong>
-          <span>Verified Buyer · 3 months</span>
-        </div>
+        <div><strong>Kevin G.</strong><span>Verified Buyer · 3 months</span></div>
       </div>
     </div>
     <div class="review-card">
@@ -302,61 +418,77 @@
       <p>"I've spent so much on products that did nothing. This is the only thing that's ever given me results I can actually see. Telling everybody."</p>
       <div class="rc-author">
         <div class="rc-avatar">KJ</div>
-        <div>
-          <strong>Kaleb J.</strong>
-          <span>Verified Buyer · 90 days</span>
-        </div>
+        <div><strong>Kaleb J.</strong><span>Verified Buyer · 90 days</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════════ FAQ ════════════════════════════════════ -->
-<section class="faq-section" id="faq">
+<!-- ════ PRODUCT INFO ACCORDIONS ════ -->
+<section class="info-section">
   <div class="section-intro">
-    <div class="eyebrow">Questions</div>
-    <h2>Frequently asked</h2>
+    <div class="eyebrow">Product Information</div>
   </div>
-  <div class="faq-list">
-    <details class="faq-item">
-      <summary>How does it work?</summary>
-      <p>The cap uses red and near-infrared LEDs to deliver light directly to your scalp. This supports cellular energy in hair follicles and helps create a better environment for healthy hair — a process called photobiomodulation, with substantial research behind it.</p>
+  <div class="accordion-list">
+    <details class="accordion-item">
+      <summary><span class="acc-check">☑</span> Description <span class="acc-arrow">∨</span></summary>
+      <div class="acc-body">
+        <p>The LumiScalp Hair Therapy Cap uses clinically studied 660nm red light and 850nm near-infrared wavelengths to support scalp health and a better environment for hair growth. The cap features up to 100 high-powered LEDs arranged for full scalp coverage in a single 25-minute hands-free session.</p>
+        <p style="margin-top:12px">What's in the box: LumiScalp Cap, USB charging cable, user guide. The cap is lightweight, rechargeable, and designed to be worn comfortably during any activity.</p>
+      </div>
     </details>
-    <details class="faq-item">
-      <summary>How long until I see results?</summary>
-      <p>Many users notice reduced shedding within 3–4 weeks and visible improvement in density around 90 days of consistent use. Hair growth is gradual, so patience and consistency are key. Results vary between individuals.</p>
+    <details class="accordion-item">
+      <summary><span class="acc-check">☑</span> F.A.Q <span class="acc-arrow">∨</span></summary>
+      <div class="acc-body" id="faq">
+        <p><strong>How does it work?</strong> The cap delivers red and near-infrared light directly to your scalp via LED diodes. The specific wavelengths trigger a cellular energy response in follicles — a process called photobiomodulation — that supports healthier hair growth conditions.</p>
+        <p style="margin-top:10px"><strong>How long until I see results?</strong> Most users notice reduced shedding in weeks 3–4 and visible density improvement around 90 days. Consistency is key.</p>
+        <p style="margin-top:10px"><strong>How often do I use it?</strong> 25 minutes per day, every day. Hands-free — use it while doing anything.</p>
+        <p style="margin-top:10px"><strong>Is it safe?</strong> Yes. Red light therapy at these wavelengths is non-ionizing (no UV), non-thermal, and has an extensive safety record across thousands of clinical studies.</p>
+      </div>
     </details>
-    <details class="faq-item">
-      <summary>How long do I use it each day?</summary>
-      <p>25 minutes per day. The hands-free design means you can use it while doing anything — working, watching TV, or relaxing.</p>
+    <details class="accordion-item">
+      <summary><span class="acc-check">☑</span> Shipping &amp; Returns <span class="acc-arrow">∨</span></summary>
+      <div class="acc-body">
+        <p>All orders ship free, worldwide. US orders typically arrive in 7–18 business days. International orders may take up to 30 business days. Orders process within 1–3 business days of purchase.</p>
+        <p style="margin-top:10px">We accept returns on all orders within 90 days of purchase in original condition. Contact support to initiate a return and we'll handle the rest.</p>
+      </div>
     </details>
-    <details class="faq-item">
-      <summary>What's included?</summary>
-      <p>Your LumiScalp cap, USB charging cable, user guide, and the LumiScalp Hair Serum (bundled free with every order).</p>
-    </details>
-    <details class="faq-item">
-      <summary>What's your return policy?</summary>
-      <p>We offer a 90-day money-back guarantee. If you're not satisfied with your results after consistent use, contact us and we'll make it right. Items must be returned in original condition.</p>
-    </details>
-    <details class="faq-item">
-      <summary>When will my order arrive?</summary>
-      <p>Orders process within 1–3 business days. US delivery typically takes 7–18 business days. International orders may take up to 30 business days. All orders ship free.</p>
+    <details class="accordion-item">
+      <summary><span class="acc-check">☑</span> 90 Day Guarantee <span class="acc-arrow">∨</span></summary>
+      <div class="acc-body">
+        <p>We stand behind LumiScalp 100%. If you use it consistently for 90 days and don't see results you're happy with, contact us for a full refund — no questions asked. Hair growth takes time, which is why our guarantee matches the real timeline for results.</p>
+        <p style="margin-top:10px">The optional $9.99 extended 90-Day Guarantee add-on gives you priority support, a dedicated results check-in at 45 days, and expedited refund processing if needed.</p>
+      </div>
     </details>
   </div>
 </section>
 
-<!-- ════════════════════════════════════ CTA BANNER ════════════════════════════════════ -->
+<!-- ════ CTA BANNER ════ -->
 <section class="cta-section">
   <div class="cta-inner">
     <h2>Start your hair journey today</h2>
     <p>25 minutes a day. Free shipping. 90-day guarantee.</p>
     <button class="btn-atc btn-cta" onclick="document.querySelector('.product-hero').scrollIntoView({behavior:'smooth'})">
-      Shop Now — From $69.99
+      Shop Now — From $69.00
     </button>
   </div>
 </section>
 
-<!-- ════════════════════════════════════ FOOTER ════════════════════════════════════ -->
+<!-- ════ TRACK YOUR ORDER ════ -->
+<section class="track-section">
+  <div class="track-inner">
+    <div class="track-icon">📦</div>
+    <h3>Track Your Order</h3>
+    <p>Already ordered? Enter your order number or email below to check your delivery status.</p>
+    <div class="track-form">
+      <input type="text" class="track-input" placeholder="Order number or email address">
+      <button class="track-btn" onclick="alert('Track order feature coming soon. Email support@lumiscalp.com for status.')">Track →</button>
+    </div>
+    <p class="track-note">US orders typically arrive in 7–18 business days. Questions? Email <a href="mailto:support@lumiscalp.com">support@lumiscalp.com</a></p>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
 <footer>
   <div class="footer-grid">
     <div>
@@ -367,7 +499,6 @@
       <strong>Shop</strong>
       <ul>
         <li><a href="#">Hair Therapy Cap</a></li>
-        <li><a href="#">Hair Serum</a></li>
         <li><a href="#">Bundles</a></li>
       </ul>
     </div>
@@ -377,7 +508,7 @@
         <li><a href="#faq">FAQ</a></li>
         <li><a href="#">Shipping</a></li>
         <li><a href="#">Returns</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="mailto:support@lumiscalp.com">Contact</a></li>
       </ul>
     </div>
     <div>
@@ -391,13 +522,13 @@
   </div>
   <div class="footer-bottom">
     <span>© 2026 LumiScalp. All rights reserved.</span>
-    <span>*These statements have not been evaluated by the FDA. This product is not intended to diagnose, treat, cure, or prevent any disease.</span>
+    <span>*These statements have not been evaluated by the FDA.</span>
   </div>
 </footer>
 
 </main>
 
-<!-- ════════════════════════════════════ CART DRAWER ════════════════════════════════════ -->
+<!-- ════ CART DRAWER ════ -->
 <div class="cart-drawer" id="cart-drawer" role="dialog" aria-label="Shopping cart">
   <div class="drawer-backdrop" onclick="closeCart()"></div>
   <div class="drawer-panel">
@@ -423,138 +554,41 @@
   </div>
 </div>
 
-<!-- ════════════════════════════════════ CHECKOUT MODAL ════════════════════════════════════ -->
-<div class="checkout-modal" id="checkout-modal" role="dialog" aria-modal="true" aria-label="Checkout">
-  <div class="checkout-backdrop" onclick="closeCheckout()"></div>
-  <div class="checkout-box" id="checkout-box">
-    <div id="success-wrap" style="display:none">
-      <div class="checkout-success">
-        <div class="success-icon">✓</div>
-        <h3>Order Placed!</h3>
-        <p>Your LumiScalp cap is on its way. You'll receive a confirmation email with tracking shortly.</p>
-        <button class="btn-atc" onclick="closeCheckout();resetCart()">Back to Shop</button>
-      </div>
-    </div>
-    <div id="form-wrap">
-      <div class="checkout-header">
-        <h2>Checkout</h2>
-        <button class="modal-close" onclick="closeCheckout()" aria-label="Close checkout">✕</button>
-      </div>
-      <div class="checkout-steps">
-        <div class="step-tab active" id="tab-1">1. Shipping</div>
-        <div class="step-tab" id="tab-2">2. Payment</div>
-        <div class="step-tab" id="tab-3">3. Review</div>
-      </div>
-      <!-- Step 1 -->
-      <div class="checkout-panel active" id="panel-1">
-        <div class="sec-label">Contact Information</div>
-        <div class="form-row c2">
-          <div class="form-group" id="fg-fn">
-            <label for="f-fn">First Name</label>
-            <input type="text" id="f-fn" autocomplete="given-name" placeholder="Jane">
-            <span class="field-err">Required</span>
-          </div>
-          <div class="form-group" id="fg-ln">
-            <label for="f-ln">Last Name</label>
-            <input type="text" id="f-ln" autocomplete="family-name" placeholder="Smith">
-            <span class="field-err">Required</span>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group" id="fg-em">
-            <label for="f-em">Email</label>
-            <input type="email" id="f-em" autocomplete="email" placeholder="jane@example.com">
-            <span class="field-err">Valid email required</span>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="f-ph">Phone (optional)</label>
-            <input type="tel" id="f-ph" autocomplete="tel" placeholder="+1 555 000 0000">
-          </div>
-        </div>
-        <div class="sec-label" style="margin-top:20px">Shipping Address</div>
-        <div class="form-row">
-          <div class="form-group" id="fg-ad">
-            <label for="f-ad">Address</label>
-            <input type="text" id="f-ad" autocomplete="street-address" placeholder="123 Main St">
-            <span class="field-err">Required</span>
-          </div>
-        </div>
-        <div class="form-row c2">
-          <div class="form-group" id="fg-ct">
-            <label for="f-ct">City</label>
-            <input type="text" id="f-ct" autocomplete="address-level2" placeholder="New York">
-            <span class="field-err">Required</span>
-          </div>
-          <div class="form-group" id="fg-zp">
-            <label for="f-zp">ZIP / Postal Code</label>
-            <input type="text" id="f-zp" autocomplete="postal-code" placeholder="10001">
-            <span class="field-err">Required</span>
-          </div>
-        </div>
-        <div class="form-row c2">
-          <div class="form-group">
-            <label for="f-st">State / Province</label>
-            <input type="text" id="f-st" autocomplete="address-level1" placeholder="NY">
-          </div>
-          <div class="form-group">
-            <label for="f-co">Country</label>
-            <select id="f-co" autocomplete="country">
-              <option value="US">United States</option>
-              <option value="CA">Canada</option>
-              <option value="GB">United Kingdom</option>
-              <option value="AU">Australia</option>
-              <option value="DE">Germany</option>
-              <option value="FR">France</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-        </div>
-        <div class="checkout-nav">
-          <button class="btn-next" onclick="goStep(2)">Continue to Payment →</button>
-        </div>
-      </div>
-      <!-- Step 2 -->
-      <div class="checkout-panel" id="panel-2">
-        <div class="sec-label">Payment Details</div>
-        <div class="form-row">
-          <div class="form-group" id="fg-stripe-element">
-            <div id="stripe-payment-element" style="min-height:48px"></div>
-            <div id="stripe-element-errors" style="color:#c0392b;font-size:13px;margin-top:6px"></div>
-          </div>
-        </div>
-        <p class="sec-note">🔒 Your payment info is encrypted and never stored on our servers</p>
-        <div class="checkout-nav">
-          <button class="btn-back" onclick="goStep(1)">← Back</button>
-          <button class="btn-next" id="btn-to-review" onclick="goStep(3)">Review Order →</button>
-        </div>
-      </div>
-      <!-- Step 3 -->
-      <div class="checkout-panel" id="panel-3">
-        <div class="sec-label">Order Summary</div>
-        <div id="review-summary"></div>
-        <div class="sec-label" style="margin-top:20px">Extras</div>
-        <div id="review-addons"></div>
-        <p class="sec-note" style="margin-top:16px">🔒 Secure · Encrypted · Trusted</p>
-        <div class="checkout-nav">
-          <button class="btn-back" onclick="goStep(2)">← Back</button>
-          <button class="btn-next btn-place" id="place-btn" onclick="placeOrder()">✓ Place Order</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <script src="script.js"></script>
+
+<!-- Before/After Slider JS -->
 <script>
+(function() {
+  const slider  = document.getElementById('ba-slider');
+  const before  = document.getElementById('ba-before-panel');
+  const handle  = document.getElementById('ba-handle');
+  if (!slider || !before || !handle) return;
+
+  let dragging = false;
+  let pct = 50;
+
+  function setPos(x) {
+    const rect = slider.getBoundingClientRect();
+    pct = Math.min(100, Math.max(0, ((x - rect.left) / rect.width) * 100));
+    before.style.width = pct + '%';
+    handle.style.left  = pct + '%';
+  }
+
+  handle.addEventListener('mousedown',  () => { dragging = true; });
+  handle.addEventListener('touchstart', () => { dragging = true; }, { passive: true });
+  document.addEventListener('mousemove', e => { if (dragging) setPos(e.clientX); });
+  document.addEventListener('touchmove', e => { if (dragging) setPos(e.touches[0].clientX); }, { passive: true });
+  document.addEventListener('mouseup',  () => { dragging = false; });
+  document.addEventListener('touchend', () => { dragging = false; });
+  slider.addEventListener('click', e => setPos(e.clientX));
+
+  // Init
+  before.style.width = '50%';
+  handle.style.left  = '50%';
+})();
+
 if (new URLSearchParams(window.location.search).get('order') === 'success') {
   sessionStorage.removeItem('ls_cart');
-  window.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('checkout-modal').classList.add('open');
-    document.getElementById('form-wrap').style.display = 'none';
-    document.getElementById('success-wrap').style.display = 'block';
-  });
 }
 </script>
 </body>

@@ -1,44 +1,103 @@
 'use strict';
 
 /* ── PRICING (must mirror order.js server-side prices exactly) ── */
-const BUNDLES = {
-  1: { qty: 1, price: 69.99,  was: 139.99 },
-  2: { qty: 2, price: 124.99, was: 279.98 },
+// LED pricing per cap
+const LED_PRICES = {
+  56:  { price: 69.00,  was: 139.99 },
+  100: { price: 79.00,  was: 159.99 },
 };
-const ADDON_LIST = [
-  { id: 'serum', icon: '\u2728', name: 'LumiScalp Hair Serum', price: 0 },
-];
 
-let selBundle = 2;
-let cartItems = [];
-let curStep   = 1;
+// Bundle multipliers & structure
+// bundle key = number of caps
+const BUNDLES_META = {
+  1: { qty: 1, label: '1 Cap',  sub: 'Single' },
+  2: { qty: 2, label: '2 Caps', sub: 'Share with a loved one' },
+};
 
-/* ── COUNTDOWN ── */
-(function () {
-  const KEY = 'lumiscalp_sale_end_v1';
-  let end = Number(sessionStorage.getItem(KEY));
-  if (!end || end < Date.now()) {
-    end = Date.now() + ((2 * 86400) + (23 * 3600) + (55 * 60)) * 1000;
-    sessionStorage.setItem(KEY, end);
+const GUARANTEE_PRICE = 9.99;
+
+let selLED      = 56;
+let selBundle   = 2;
+let cartItems   = [];
+let guarantees  = { 1: false, 2: true }; // bundle -> guarantee on/off
+
+/* ── LED TOGGLE ── */
+function setLED(count) {
+  selLED = count;
+  document.querySelectorAll('.led-btn').forEach(btn => btn.classList.remove('active'));
+  const target = document.getElementById('led-' + count);
+  if (target) target.classList.add('active');
+  updateAllPrices();
+}
+
+/* ── PRICE COMPUTATION ── */
+function bundlePrice(bundleKey) {
+  return LED_PRICES[selLED].price * BUNDLES_META[bundleKey].qty;
+}
+function bundleWas(bundleKey) {
+  return LED_PRICES[selLED].was * BUNDLES_META[bundleKey].qty;
+}
+function bundleTotal(bundleKey) {
+  const base = bundlePrice(bundleKey);
+  const g    = guarantees[bundleKey] ? GUARANTEE_PRICE : 0;
+  return base + g;
+}
+
+function updateAllPrices() {
+  // Hero price (reflects selected bundle)
+  const heroPrice = document.getElementById('hero-price');
+  const heroWas   = document.getElementById('hero-was');
+  if (heroPrice) heroPrice.textContent = '$' + bundleTotal(selBundle).toFixed(2);
+  if (heroWas)   heroWas.textContent   = '$' + bundleWas(selBundle).toFixed(2);
+
+  // Bundle 1 prices
+  const b1p = document.getElementById('b1-price');
+  const b1w = document.getElementById('b1-was');
+  if (b1p) b1p.textContent = '$' + bundleTotal(1).toFixed(2);
+  if (b1w) b1w.textContent = '$' + bundleWas(1).toFixed(2);
+
+  // Bundle 2 prices
+  const b2p = document.getElementById('b2-price');
+  const b2w = document.getElementById('b2-was');
+  if (b2p) b2p.textContent = '$' + bundleTotal(2).toFixed(2);
+  if (b2w) b2w.textContent = '$' + bundleWas(2).toFixed(2);
+
+  // Bundle 2 sub-item prices
+  const b2cp = document.getElementById('b2-cap-price');
+  const b2cw = document.getElementById('b2-cap-was');
+  if (b2cp) b2cp.textContent = '$' + bundlePrice(2).toFixed(2);
+  if (b2cw) b2cw.textContent = '$' + bundleWas(2).toFixed(2);
+
+  // Total row + ATC
+  const totalEl  = document.getElementById('total-price');
+  const atcPrice = document.getElementById('atc-price');
+  const t = bundleTotal(selBundle).toFixed(2);
+  if (totalEl)  totalEl.textContent  = '$' + t;
+  if (atcPrice) atcPrice.textContent = '$' + t;
+}
+
+/* ── GUARANTEE TOGGLE ── */
+function toggleGuarantee(bundleKey) {
+  guarantees[bundleKey] = !guarantees[bundleKey];
+  const el = document.getElementById('guarantee-check-' + bundleKey);
+  if (el) {
+    el.classList.toggle('checked', guarantees[bundleKey]);
+    el.textContent = guarantees[bundleKey] ? '✓' : '';
   }
-  function pad(n) { return String(n).padStart(2, '0'); }
-  function tick() {
-    let d = Math.max(0, end - Date.now());
-    const D = Math.floor(d / 86400000); d %= 86400000;
-    const H = Math.floor(d / 3600000);  d %= 3600000;
-    const M = Math.floor(d / 60000);    d %= 60000;
-    const S = Math.floor(d / 1000);
-    const dEl = document.getElementById('cd-d');
-    const hEl = document.getElementById('cd-h');
-    const mEl = document.getElementById('cd-m');
-    const sEl = document.getElementById('cd-s');
-    if (dEl) dEl.textContent = pad(D);
-    if (hEl) hEl.textContent = pad(H);
-    if (mEl) mEl.textContent = pad(M);
-    if (sEl) sEl.textContent = pad(S);
-  }
-  tick(); setInterval(tick, 1000);
-})();
+  updateAllPrices();
+}
+
+/* ── BUNDLE SELECT ── */
+function selectBundle(n) {
+  selBundle = n;
+  [1, 2].forEach(i => {
+    const c   = document.getElementById('card-' + i);
+    const sel = (i === n);
+    c.classList.toggle('selected', sel);
+    c.setAttribute('aria-checked', sel ? 'true' : 'false');
+  });
+  updateAllPrices();
+}
 
 /* ── MEDIA SWITCHER ── */
 function switchMedia(btn, type, src, label) {
@@ -62,57 +121,16 @@ function switchMedia(btn, type, src, label) {
 }
 function switchImg(btn, src, label) { switchMedia(btn, 'image', src, label); }
 
-/* ── BUNDLE SELECT ── */
-function selectBundle(n) {
-  selBundle = n;
-  [1, 2].forEach(i => {
-    const c   = document.getElementById('card-' + i);
-    const sel = (i === n);
-    c.classList.toggle('selected', sel);
-    c.setAttribute('aria-checked', sel ? 'true' : 'false');
-  });
-  const b = BUNDLES[n];
-  const heroPrice = document.getElementById('hero-price');
-  const heroWas   = document.getElementById('hero-was');
-  if (heroPrice) heroPrice.textContent = '$' + b.price.toFixed(2);
-  if (heroWas)   heroWas.textContent   = '$' + b.was.toFixed(2);
-  updateTotalPrice();
-}
-
-function updateTotalPrice() {
-  const b     = BUNDLES[selBundle];
-  const ads   = getAddonsForBundle(selBundle);
-  const extra = ADDON_LIST.reduce((s, a) => s + (ads[a.id] ? a.price : 0), 0);
-  const total = b.price + extra;
-  const totalEl  = document.getElementById('total-price');
-  const atcPrice = document.getElementById('atc-price');
-  if (totalEl)  totalEl.textContent  = '$' + total.toFixed(2);
-  if (atcPrice) atcPrice.textContent = '$' + total.toFixed(2);
-}
-
-function toggleAddon(e, el, bundleId, addonId) {
-  e.stopPropagation();
-  const on = !el.classList.contains('checked');
-  el.classList.toggle('checked', on);
-  el.innerHTML = on ? '\u2713' : '';
-  el.setAttribute('aria-checked', on ? 'true' : 'false');
-  updateTotalPrice();
-}
-
-function getAddonsForBundle(n) {
-  // Serum is always included
-  return { serum: true };
+/* ── CART ── */
+function getCartItemPrice(item) {
+  const base = LED_PRICES[item.led].price * BUNDLES_META[item.bundle].qty;
+  return base + (item.guarantee ? GUARANTEE_PRICE : 0);
 }
 
 function cartTotal() {
-  return cartItems.reduce((sum, item) => {
-    const b   = BUNDLES[item.bundle];
-    const ext = ADDON_LIST.reduce((s, a) => s + (item.addons[a.id] ? a.price : 0), 0);
-    return sum + b.price + ext;
-  }, 0);
+  return cartItems.reduce((sum, item) => sum + getCartItemPrice(item), 0);
 }
 
-/* ── CART RENDER ── */
 function renderCart() {
   const itemsEl  = document.getElementById('drawer-items');
   const footerEl = document.getElementById('drawer-footer');
@@ -122,7 +140,6 @@ function renderCart() {
   if (!cartItems.length) {
     if (emptyEl)  emptyEl.style.display  = 'block';
     if (footerEl) footerEl.style.display = 'none';
-    // clear any old rendered items
     const oldItems = itemsEl ? itemsEl.querySelectorAll('.cart-item') : [];
     oldItems.forEach(el => el.remove());
     return;
@@ -131,54 +148,36 @@ function renderCart() {
   if (emptyEl)  emptyEl.style.display  = 'none';
   if (footerEl) footerEl.style.display = 'block';
 
-  // Remove old items, re-render
   const oldItems = itemsEl ? itemsEl.querySelectorAll('.cart-item') : [];
   oldItems.forEach(el => el.remove());
 
   let html = '';
   cartItems.forEach((item, idx) => {
-    const b     = BUNDLES[item.bundle];
-    const saved = b.was - b.price;
+    const meta  = BUNDLES_META[item.bundle];
+    const price = getCartItemPrice(item);
     html += `
       <div class="cart-item">
         <div class="cart-item-top">
           <img class="cart-item-img" src="${THUMB}" alt="LumiScalp Hair Therapy Cap">
           <div class="cart-item-info">
-            <div class="cart-item-name">LumiScalp Hair Therapy Cap</div>
-            <div class="cart-item-detail">Qty: ${b.qty} &bull; Red Light Therapy</div>
-            <div class="cart-item-price">$${b.price.toFixed(2)}</div>
+            <div class="cart-item-name">LumiScalp Cap × ${meta.qty} (${item.led} LEDs)</div>
+            <div class="cart-item-detail">Red Light Therapy${item.guarantee ? ' + 90 Day Guarantee' : ''}</div>
+            <div class="cart-item-price">$${price.toFixed(2)}</div>
           </div>
         </div>
         <div class="cart-item-bottom">
           <div class="qty-stepper">
             <button class="qty-btn" onclick="changeBundleQty(${idx},-1)">&#8722;</button>
-            <span class="qty-num">${b.qty}</span>
+            <span class="qty-num">${meta.qty}</span>
             <button class="qty-btn" onclick="changeBundleQty(${idx},1)">+</button>
           </div>
           <button class="cart-item-remove" onclick="removeItem(${idx})" aria-label="Remove item">Remove</button>
         </div>
       </div>`;
-
-    // Serum is always bundled — show as locked "Included free" line
-    ADDON_LIST.forEach(a => {
-      html += `
-        <div class="cart-item">
-          <div class="cart-item-top">
-            <div class="cart-item-img" style="display:flex;align-items:center;justify-content:center;font-size:30px;background:var(--dark-mid)">${a.icon}</div>
-            <div class="cart-item-info">
-              <div class="cart-item-name">${a.name}</div>
-              <div class="cart-item-detail" style="color:#4ade80;font-weight:600">Included free</div>
-            </div>
-          </div>
-        </div>`;
-    });
   });
 
-  if (itemsEl) {
-    itemsEl.innerHTML = html;
-  }
+  if (itemsEl) itemsEl.innerHTML = html;
 
-  // Update total in drawer
   const drawerTotal = document.getElementById('drawer-total-price');
   if (drawerTotal) drawerTotal.textContent = '$' + cartTotal().toFixed(2);
 }
@@ -191,18 +190,11 @@ function changeBundleQty(idx, delta) {
   updateBadge(); renderCart();
 }
 
-function removeAddonFromItem(idx, addonId) {
-  if (cartItems[idx]) { cartItems[idx].addons[addonId] = false; }
-  updateBadge(); renderCart();
-}
-
 function removeItem(i) { cartItems.splice(i, 1); updateBadge(); renderCart(); }
 
 function updateBadge() {
   const badge = document.getElementById('cart-badge');
-  const n = cartItems.reduce((s, item) => {
-    return s + BUNDLES[item.bundle].qty + ADDON_LIST.filter(a => item.addons[a.id]).length;
-  }, 0);
+  const n = cartItems.reduce((s, item) => s + BUNDLES_META[item.bundle].qty, 0);
   if (badge) {
     badge.textContent = n;
     badge.classList.toggle('show', n > 0);
@@ -210,8 +202,11 @@ function updateBadge() {
 }
 
 function addToCart() {
-  const addons = getAddonsForBundle(selBundle);
-  cartItems.push({ bundle: selBundle, addons });
+  cartItems.push({
+    bundle:    selBundle,
+    led:       selLED,
+    guarantee: guarantees[selBundle],
+  });
   updateBadge();
   renderCart();
   toast('\u{1F6D2} Added to cart!');
@@ -219,8 +214,11 @@ function addToCart() {
 }
 
 function buyNow() {
-  const addons = getAddonsForBundle(selBundle);
-  cartItems = [{ bundle: selBundle, addons }];
+  cartItems = [{
+    bundle:    selBundle,
+    led:       selLED,
+    guarantee: guarantees[selBundle],
+  }];
   updateBadge();
   renderCart();
   openCheckout();
@@ -243,213 +241,10 @@ function openCheckout() {
   try { sessionStorage.setItem('ls_cart', JSON.stringify(cartItems)); } catch(e) {}
   window.location.href = '/checkout.html';
 }
-function closeCheckout() {
-  document.getElementById('checkout-modal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function closeAll() { closeCart(); closeCheckout(); }
-
-function showSuccess() {
-  document.getElementById('form-wrap').style.display    = 'none';
-  document.getElementById('success-wrap').style.display = 'block';
-  document.getElementById('checkout-box').scrollTop = 0;
-}
-
-function showStep(n) {
-  if (curStep === 2 && n !== 2) {
-    const errEl = document.getElementById('stripe-element-errors');
-    if (errEl) errEl.textContent = '';
-  }
-  curStep = n;
-  [1, 2, 3].forEach(i => {
-    document.getElementById('panel-' + i).classList.toggle('active', i === n);
-    const tab = document.getElementById('tab-' + i);
-    tab.classList.remove('active', 'done');
-    if (i === n)    tab.classList.add('active');
-    else if (i < n) tab.classList.add('done');
-  });
-  if (n === 3) renderReview();
-  if (n === 2) initStripePaymentElement();
-  document.getElementById('checkout-box').scrollTop = 0;
-}
-
-function checkField(fieldId, groupId, fn) {
-  const el  = document.getElementById(fieldId);
-  const grp = document.getElementById(groupId);
-  const ok  = fn ? fn(el.value.trim()) : el.value.trim().length > 0;
-  grp.classList.toggle('has-err', !ok);
-  return ok;
-}
-function validateStep(n) {
-  if (n === 1) {
-    return !!(
-      checkField('f-fn', 'fg-fn') &
-      checkField('f-ln', 'fg-ln') &
-      checkField('f-em', 'fg-em', v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) &
-      checkField('f-ad', 'fg-ad') &
-      checkField('f-ct', 'fg-ct') &
-      checkField('f-zp', 'fg-zp')
-    );
-  }
-  if (n === 2) return validatePaymentElement();
-  return true;
-}
-function goStep(n) {
-  if (n > curStep && !validateStep(curStep)) return;
-  showStep(n);
-}
-
-/* ── ORDER REVIEW ── */
-function renderReview() {
-  const sum = document.getElementById('review-summary');
-  const ael = document.getElementById('review-addons');
-  if (!cartItems.length) {
-    sum.innerHTML = '<p style="color:var(--text-muted)">Your cart is empty.</p>';
-    return;
-  }
-
-  let rows = '', sub = 0;
-  cartItems.forEach(item => {
-    const b = BUNDLES[item.bundle];
-    rows += `<div class="cos-row"><span class="cn">LumiScalp Cap &times;${b.qty}</span><span class="cp">$${b.price.toFixed(2)}</span></div>`;
-    sub  += b.price;
-  });
-
-  const masterAddons = cartItems[0].addons;
-  let aTotal = 0;
-  ADDON_LIST.forEach(a => {
-    if (masterAddons[a.id]) {
-      rows   += `<div class="cos-row"><span class="cn">${a.icon} ${a.name}</span><span class="cp">${a.price > 0 ? '+$' + a.price.toFixed(2) : 'Included'}</span></div>`;
-      aTotal += a.price;
-    }
-  });
-
-  const tot = sub + aTotal;
-  sum.innerHTML = rows
-    + '<div class="cos-div"></div>'
-    + '<div class="cos-row"><span class="cn">Shipping</span><span class="cp" style="color:var(--success)">FREE</span></div>'
-    + '<div class="cos-div"></div>'
-    + `<div class="cos-total"><span>Total</span><span id="rev-total">$${tot.toFixed(2)}</span></div>`;
-
-  let ah = '';
-  ADDON_LIST.forEach(a => {
-    const on = masterAddons[a.id];
-    ah += `<div class="ca-row${on ? ' on' : ''}" id="ra-${a.id}" onclick="toggleRevAddon('${a.id}')"
-      style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;gap:12px">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:22px;height:22px;border-radius:5px;border:2px solid ${on ? 'var(--crimson)' : 'var(--border-mid)'};background:${on ? 'var(--crimson)' : 'transparent'};display:flex;align-items:center;justify-content:center;font-size:12px;color:white;flex-shrink:0">${on ? '\u2713' : ''}</div>
-        <span style="font-size:13px;color:var(--text-secondary)">${a.icon} ${a.name}</span>
-      </div>
-      <span style="font-size:13px;color:var(--text-muted)">+$${a.price}.00</span>
-    </div>`;
-  });
-  ael.innerHTML = ah;
-}
-
-function toggleRevAddon(id) {
-  cartItems.forEach(item => { item.addons[id] = !item.addons[id]; });
-  renderReview();
-}
-
-/* ── STRIPE ── */
-const STRIPE_PK = 'pk_live_51TdPvsK2cuhO8Q3M3WKZoAGbe9AxlUndp85LfhfqO48Dyr5y25zwlfqr45ZUA2cSrCpFsxF1nmeo1gPy5VxNcaNE00qwrYSW2R';
-
-let stripeInstance    = null;
-let stripeElements    = null;
-let paymentElement    = null;
-let clientSecretCache = null;
-
-async function initStripePaymentElement() {
-  if (paymentElement) return;
-  try {
-    stripeInstance = Stripe(STRIPE_PK);
-    const total = cartTotal();
-    const res = await fetch('/api/order', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ amount: total * 100, items: cartItems }),
-    });
-    const data = await res.json();
-    if (!data.clientSecret) throw new Error('Could not initialise payment.');
-    clientSecretCache = data.clientSecret;
-    stripeElements = stripeInstance.elements({ clientSecret: clientSecretCache });
-    paymentElement = stripeElements.create('payment');
-    paymentElement.mount('#stripe-payment-element');
-  } catch (err) {
-    const errEl = document.getElementById('stripe-element-errors');
-    if (errEl) errEl.textContent = 'Payment setup failed: ' + err.message;
-  }
-}
-
-function validatePaymentElement() {
-  if (!paymentElement) {
-    const errEl = document.getElementById('stripe-element-errors');
-    if (errEl) errEl.textContent = 'Payment form not ready. Please wait a moment and try again.';
-    return false;
-  }
-  const errEl = document.getElementById('stripe-element-errors');
-  if (errEl) errEl.textContent = '';
-  return true;
-}
-
-async function placeOrder() {
-  const btn = document.getElementById('place-btn');
-  btn.textContent = '\u23F3 Placing...';
-  btn.disabled = true;
-
-  try {
-    if (!stripeInstance || !stripeElements || !clientSecretCache) {
-      throw new Error('Payment not initialised. Please go back to the Payment step.');
-    }
-
-    const { error, paymentIntent } = await stripeInstance.confirmPayment({
-      elements: stripeElements,
-      confirmParams: {
-        return_url: window.location.origin + '/?order=success',
-        receipt_email: document.getElementById('f-em').value.trim(),
-        shipping: {
-          name: document.getElementById('f-fn').value.trim() + ' ' + document.getElementById('f-ln').value.trim(),
-          address: {
-            line1:       document.getElementById('f-ad').value.trim(),
-            city:        document.getElementById('f-ct').value.trim(),
-            postal_code: document.getElementById('f-zp').value.trim(),
-            state:       document.getElementById('f-st').value.trim(),
-            country:     document.getElementById('f-co').value,
-          },
-        },
-      },
-      redirect: 'if_required',
-    });
-
-    if (error) {
-      const errEl = document.getElementById('stripe-element-errors');
-      if (errEl) errEl.textContent = error.message;
-      btn.textContent = '\u2713 Place Order';
-      btn.disabled = false;
-      return;
-    }
-
-    if (paymentIntent && paymentIntent.status === 'succeeded') {
-      showSuccess();
-      resetCart();
-    } else {
-      const errEl = document.getElementById('stripe-element-errors');
-      if (errEl) errEl.textContent = 'Payment was not completed. Please try again.';
-      btn.textContent = '\u2713 Place Order';
-      btn.disabled = false;
-    }
-  } catch (err) {
-    alert('Error: ' + err.message);
-    btn.textContent = '\u2713 Place Order';
-    btn.disabled = false;
-  }
-}
+function closeAll() { closeCart(); }
 
 function resetCart() {
   cartItems = [];
-  paymentElement    = null;
-  stripeElements    = null;
-  clientSecretCache = null;
   updateBadge();
   renderCart();
 }
@@ -463,8 +258,8 @@ function toast(msg) {
     t.id = 'ls-toast';
     t.style.cssText = [
       'position:fixed','bottom:32px','left:50%','transform:translateX(-50%) translateY(20px)',
-      'background:var(--dark-mid)','color:var(--text-primary)',
-      'border:1px solid var(--border-mid)',
+      'background:#222','color:#f0f0f0',
+      'border:1px solid #444',
       'padding:12px 24px','border-radius:40px',
       'font-size:14px','font-weight:600',
       'z-index:9999','opacity:0',
@@ -498,5 +293,6 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(); 
 
 /* ── INIT ── */
 selectBundle(2);
+setLED(56);
 renderCart();
-updateTotalPrice();
+updateAllPrices();
