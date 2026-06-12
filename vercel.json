@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "functions": {
+    "api/order.js":           { "maxDuration": 10 },
+    "api/update-shipping.js": { "maxDuration": 10 },
+    "api/webhook.js":         { "maxDuration": 10 }
+  },
+  "rewrites": [
+    { "source": "/checkout", "destination": "/checkout.html" },
+    { "source": "/((?!api/|.*\\.jpg|.*\\.jpeg|.*\\.png|.*\\.gif|.*\\.webp|.*\\.css|.*\\.js|.*\\.ico).*)", "destination": "/$1" }
+  ]
+}
